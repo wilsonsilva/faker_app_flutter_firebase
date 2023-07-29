@@ -46,9 +46,10 @@ class JobsListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firestoreRepository = ref.watch(firestoreRepositoryProvider);
+    final user = ref.watch(firebaseAuthProvider).currentUser;
 
     return FirestoreListView<Job>(
-      query: firestoreRepository.jobsQuery(),
+      query: firestoreRepository.jobsQuery(user!.uid),
       itemBuilder: (BuildContext context, QueryDocumentSnapshot<Job> doc) {
         final job = doc.data();
 
@@ -60,7 +61,7 @@ class JobsListView extends ConsumerWidget {
           ),
           direction: DismissDirection.endToStart,
           onDismissed: (direction) {
-            ref.read(firestoreRepositoryProvider).deleteJob(doc.id);
+            ref.read(firestoreRepositoryProvider).deleteJob(user!.uid, doc.id);
           },
           child: ListTile(
             title: Text(job.title),

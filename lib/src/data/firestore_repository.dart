@@ -9,8 +9,7 @@ class FirestoreRepository {
   final FirebaseFirestore _firestore;
 
   Future<void> addJob(String uid, String title, String company) async {
-    // TODO: This may lead to security flaws
-    final docRef = await _firestore.collection('jobs').add({
+    final docRef = await _firestore.collection('users/$uid/jobs').add({
       'uid': uid,
       'title': title,
       'company': company,
@@ -20,16 +19,16 @@ class FirestoreRepository {
   }
 
   Future<void> updateJob(String uid, String jobId, String title, String company) =>
-    _firestore.doc('jobs/$jobId').update({
+    _firestore.doc('users/$uid/jobs/$jobId').update({
       'uid': uid,
       'title': title,
       'company': company,
     });
 
-  Future<void> deleteJob(String jobId) => _firestore.doc('jobs/$jobId').delete();
+  Future<void> deleteJob(String uid, String jobId) => _firestore.doc('users/$uid/jobs/$jobId').delete();
 
-  Query<Job> jobsQuery() {
-    return _firestore.collection('jobs').withConverter(
+  Query<Job> jobsQuery(String uid) {
+    return _firestore.collection('users/$uid/jobs').withConverter(
       fromFirestore: (snapshot, _) => Job.fromMap(snapshot.data()!),
       toFirestore: (job, _) => job.toMap(),
     );
