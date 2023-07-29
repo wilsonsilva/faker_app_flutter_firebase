@@ -55,6 +55,19 @@ class JobsListView extends ConsumerWidget {
         return ListTile(
           title: Text(job.title),
           subtitle: Text(job.company),
+          onTap: () {
+            final user = ref.read(firebaseAuthProvider).currentUser;
+            final faker = Faker();
+            final title = faker.job.title();
+            final company = faker.company.name();
+
+            ref.read(firestoreRepositoryProvider).updateJob(
+              user!.uid,
+              doc.id,
+              title,
+              company,
+            );
+          }
         );
       },
     );

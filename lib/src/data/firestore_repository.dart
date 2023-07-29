@@ -19,6 +19,13 @@ class FirestoreRepository {
     debugPrint(docRef.id);
   }
 
+  Future<void> updateJob(String uid, String jobId, String title, String company) =>
+    _firestore.doc('jobs/$jobId').update({
+      'uid': uid,
+      'title': title,
+      'company': company,
+    });
+
   Query<Job> jobsQuery() {
     return _firestore.collection('jobs').withConverter(
       fromFirestore: (snapshot, _) => Job.fromMap(snapshot.data()!),
