@@ -52,22 +52,33 @@ class JobsListView extends ConsumerWidget {
       itemBuilder: (BuildContext context, QueryDocumentSnapshot<Job> doc) {
         final job = doc.data();
 
-        return ListTile(
-          title: Text(job.title),
-          subtitle: Text(job.company),
-          onTap: () {
-            final user = ref.read(firebaseAuthProvider).currentUser;
-            final faker = Faker();
-            final title = faker.job.title();
-            final company = faker.company.name();
+        return Dismissible(
+          key: Key(doc.id),
+          background: const ColoredBox(
+            color: Colors.red,
+            child: Icon(Icons.delete, color: Colors.white),
+          ),
+          direction: DismissDirection.endToStart,
+          onDismissed: (direction) {
+            ref.read(firestoreRepositoryProvider).deleteJob(doc.id);
+          },
+          child: ListTile(
+            title: Text(job.title),
+            subtitle: Text(job.company),
+            onTap: () {
+              final user = ref.read(firebaseAuthProvider).currentUser;
+              final faker = Faker();
+              final title = faker.job.title();
+              final company = faker.company.name();
 
-            ref.read(firestoreRepositoryProvider).updateJob(
-              user!.uid,
-              doc.id,
-              title,
-              company,
-            );
-          }
+              ref.read(firestoreRepositoryProvider).updateJob(
+                user!.uid,
+                doc.id,
+                title,
+                company,
+              );
+            }
+          ),
         );
       },
     );

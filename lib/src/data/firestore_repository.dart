@@ -26,6 +26,8 @@ class FirestoreRepository {
       'company': company,
     });
 
+  Future<void> deleteJob(String jobId) => _firestore.doc('jobs/$jobId').delete();
+
   Query<Job> jobsQuery() {
     return _firestore.collection('jobs').withConverter(
       fromFirestore: (snapshot, _) => Job.fromMap(snapshot.data()!),
