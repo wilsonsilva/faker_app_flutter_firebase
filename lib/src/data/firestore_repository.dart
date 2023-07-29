@@ -13,6 +13,7 @@ class FirestoreRepository {
       'uid': uid,
       'title': title,
       'company': company,
+      'createdAt': FieldValue.serverTimestamp(),
     });
 
     debugPrint(docRef.id);
@@ -31,7 +32,7 @@ class FirestoreRepository {
     return _firestore.collection('users/$uid/jobs').withConverter(
       fromFirestore: (snapshot, _) => Job.fromMap(snapshot.data()!),
       toFirestore: (job, _) => job.toMap(),
-    );
+    ).orderBy('createdAt', descending: true);
   }
 }
 

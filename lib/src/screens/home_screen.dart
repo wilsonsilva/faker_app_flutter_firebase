@@ -63,11 +63,14 @@ class JobsListView extends ConsumerWidget {
           ),
           direction: DismissDirection.endToStart,
           onDismissed: (direction) {
-            ref.read(firestoreRepositoryProvider).deleteJob(user!.uid, doc.id);
+            ref.read(firestoreRepositoryProvider).deleteJob(user.uid, doc.id);
           },
           child: ListTile(
             title: Text(job.title),
             subtitle: Text(job.company),
+            trailing: job.createdAt != null
+              ? Text(job.createdAt.toString(), style: Theme.of(context).textTheme.bodySmall)
+              : null,
             onTap: () {
               final user = ref.read(firebaseAuthProvider).currentUser;
               final faker = Faker();
