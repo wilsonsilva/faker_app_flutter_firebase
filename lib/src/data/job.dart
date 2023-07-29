@@ -16,10 +16,10 @@ class Job extends Equatable {
   }
 
   Map<String, dynamic> toMap() => {
-        'uid': uid,
-        'title': title,
-        'company': company,
-      };
+    'uid': uid,
+    'title': title,
+    'company': company,
+  };
 
   @override
   List<Object?> get props => [uid, title, company];
